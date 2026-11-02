@@ -82,15 +82,23 @@ def run_session(client: Client, profile: Profile, base: dict, session: int, log=
 
 
 def prefix_reuse(session_rows: list[dict]) -> list[float]:
-    """Estimated share of the previous prompt each warm turn reused (see module doc)."""
+    """Estimated share of the previous prompt each warm turn reused (see module doc).
+
+    Uses the engine's prompt token counts when it reports them, else characters. A
+    session whose prompt stops growing was truncated by the engine; the estimate means
+    nothing there and is skipped."""
     rows = sorted((r for r in session_rows if r["ok"] and r["ttft"]), key=lambda r: r["turn"])
     if not rows or rows[0]["turn"] != 1:
         return []
-    t1, c1 = rows[0]["ttft"], rows[0]["prompt_chars"]
+    key = "prompt_tokens" if all(r.get("prompt_tokens") for r in rows) else "prompt_chars"
+    sizes = [r[key] for r in rows]
+    if key == "prompt_tokens" and any(b <= a for a, b in zip(sizes, sizes[1:])):
+        return []
+    t1, n1 = rows[0]["ttft"], rows[0][key]
     out = []
     for prev, cur in zip(rows, rows[1:]):
         if cur["turn"] != prev["turn"] + 1:
             break
-        processed = cur["ttft"] / t1 * c1
-        out.append(min(1.0, max(0.0, (cur["prompt_chars"] - processed) / prev["prompt_chars"])))
+        processed = cur["ttft"] / t1 * n1
+        out.append(min(1.0, max(0.0, (cur[key] - processed) / prev[key])))
     return out

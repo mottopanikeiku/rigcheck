@@ -56,8 +56,8 @@ def summarize(res: dict) -> list[dict]:
                 "model": _model_name(res),
                 "agent": name,
                 "agent_title": a["profile"]["title"],
-                "fit": a.get("fit", {}).get("verdict"),
-                "prompt_tokens": a.get("fit", {}).get("prompt_tokens"),
+                "fit": a.get("fit", {}).get("verdict") or _fit_from_turns(sessions),
+                "prompt_tokens": a.get("fit", {}).get("prompt_tokens") or _first_prompt(sessions),
                 "context": ep.get("context_loaded") or a.get("fit", {}).get("context"),
                 "pass": k,
                 "n": n,
@@ -80,6 +80,22 @@ def summarize(res: dict) -> list[dict]:
             }
         )
     return rows
+
+
+def _fit_from_turns(sessions: dict[int, list[dict]]) -> str | None:
+    """Without a fit check: a prompt that stops growing while the conversation grows was cut."""
+    if not sessions:
+        return None
+    for rows in sessions.values():
+        toks = [t["prompt_tokens"] for t in sorted(rows, key=lambda t: t["turn"])]
+        if all(toks) and any(b <= a for a, b in zip(toks, toks[1:])):
+            return "truncated"
+    return "fits"
+
+
+def _first_prompt(sessions: dict[int, list[dict]]) -> int | None:
+    firsts = [t["prompt_tokens"] for rows in sessions.values() for t in rows if t["turn"] == 1 and t["prompt_tokens"]]
+    return min(firsts) if firsts else None
 
 
 def _rescored(agent: dict) -> list[dict]:
@@ -139,7 +155,7 @@ def terminal(rows: list[dict]) -> str:
     head = ["setup", "agent", "prompt", "tool calls (95% CI)", "cold turn", "warm turn", "prefix reuse", "decode tok/s"]
     body = []
     for r in rows:
-        fit = ktok(r["prompt_tokens"]) + ("" if r["fit"] == "fits" else f" {str(r['fit']).upper()}")
+        fit = ktok(r["prompt_tokens"]) + ("" if r["fit"] in ("fits", None) else f" {str(r['fit']).upper()}")
         body.append(
             [
                 setup_name(r),
@@ -176,7 +192,7 @@ def markdown(rows: list[dict], svg_path: str | None = None) -> str:
         "|---|---|---:|---|---:|---:|---:|---:|",
     ]
     for r in rows:
-        fit = ktok(r["prompt_tokens"]) + ("" if r["fit"] == "fits" else f" **{r['fit']}**")
+        fit = ktok(r["prompt_tokens"]) + ("" if r["fit"] in ("fits", None) else f" **{r['fit']}**")
         out.append(
             f"| {setup_name(r)} | {r['agent']} | {fit} | {rate_ci(r)} | {interval(r['cold_ttft'])} | {interval(r['warm_ttft'])} "
             f"| {interval(r['prefix_reuse'], pct)} | {interval(r['decode_tps'], tps)} |"

@@ -1,6 +1,7 @@
 """The whole pipeline against the mock server: run, summarize, render, compare."""
 
 import json
+import math
 
 import pytest
 
@@ -62,6 +63,10 @@ def test_bad_json_and_index_bug(url):
 def test_truncated_prompt_is_flagged(url):
     (row,) = report.summarize(_run(url, "truncate", agents=("qwen-code",), trials=0, sessions=0))
     assert row["fit"] == "truncated"
+    res = _run(url, "truncate", agents=("qwen-code",), trials=0, sessions=2, fit=False)
+    (row,) = report.summarize(res)
+    assert row["fit"] == "truncated" and row["prompt_tokens"] == 4096
+    assert math.isnan(row["prefix_reuse"][0])
 
 
 def test_non_streaming_path(url):
