@@ -164,7 +164,10 @@ def run(cfg: RunConfig) -> dict:
             if jobs:
                 _log(f"{profile.title}: {len(jobs)} probe trials")
                 with ThreadPoolExecutor(max_workers=max(1, cfg.concurrency)) as pool:
-                    futs = [pool.submit(_probe_trial, client, cfg, profile, base, p, t) for p, t in jobs]
+                    # the first trial alone, so the parallel ones find the agent's prompt in cache
+                    first = pool.submit(_probe_trial, client, cfg, profile, base, *jobs[0])
+                    first.result()
+                    futs = [first] + [pool.submit(_probe_trial, client, cfg, profile, base, p, t) for p, t in jobs[1:]]
                     for fut in futs:
                         r = fut.result()
                         rows.append(r)

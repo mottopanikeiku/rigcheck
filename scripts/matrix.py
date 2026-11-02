@@ -80,6 +80,38 @@ def wait_ready(url: str, timeout: float = 900) -> None:
     raise SystemExit(f"server at {url} not ready after {timeout:.0f}s")
 
 
+SIGNALS = {signal.SIGINT, signal.SIGTERM}
+SERVERS: set[subprocess.Popen] = set()
+
+
+def spawn(cmd: list[str], logfile: str, env: dict | None = None) -> subprocess.Popen:
+    """Start a server in its own process group (so Ollama's runner child can be paused and
+    stopped with it), with the signals main() blocks unblocked again."""
+    proc = subprocess.Popen(
+        cmd,
+        env=env,
+        stdout=subprocess.DEVNULL,
+        stderr=open(logfile, "a"),
+        start_new_session=True,
+        preexec_fn=lambda: signal.pthread_sigmask(signal.SIG_UNBLOCK, SIGNALS),
+    )
+    SERVERS.add(proc)
+    return proc
+
+
+def reaper() -> None:
+    """Ctrl-C and SIGTERM land here, whatever the other threads are blocked on: resume and
+    kill any server still running (a paused one would otherwise linger), then exit."""
+    sig = signal.sigwait(SIGNALS)
+    for proc in list(SERVERS):
+        for s in (signal.SIGCONT, signal.SIGKILL):
+            try:
+                os.killpg(proc.pid, s)
+            except ProcessLookupError:
+                pass
+    os._exit(128 + sig)
+
+
 def start_llama(model: dict, args) -> tuple[subprocess.Popen, str, str]:
     gguf = Path(os.environ["MODELS"]).expanduser() / model["gguf"]
     cmd = [
@@ -96,7 +128,7 @@ def start_llama(model: dict, args) -> tuple[subprocess.Popen, str, str]:
         model["title"],
         *model["sampling"],
     ]
-    proc = subprocess.Popen(["taskset", "-c", args.cpus, *cmd], stdout=subprocess.DEVNULL, stderr=open(args.log, "a"), start_new_session=True)
+    proc = spawn(["taskset", "-c", args.cpus, *cmd], args.log)
     url = f"http://127.0.0.1:{args.port}"
     wait_ready(f"{url}/health")
     return proc, f"{url}/v1", model["title"]
@@ -105,7 +137,7 @@ def start_llama(model: dict, args) -> tuple[subprocess.Popen, str, str]:
 def start_ollama(engine: str, model: dict, args) -> tuple[subprocess.Popen, str, str]:
     env = {**os.environ, "OLLAMA_HOST": f"127.0.0.1:{args.port}", **ENGINES[engine]["env"]}
     exe = os.path.expanduser(os.environ["OLLAMA"])
-    proc = subprocess.Popen(["taskset", "-c", args.cpus, exe, "serve"], env=env, stdout=subprocess.DEVNULL, stderr=open(args.log, "a"), start_new_session=True)
+    proc = spawn(["taskset", "-c", args.cpus, exe, "serve"], args.log, env=env)
     url = f"http://127.0.0.1:{args.port}"
     wait_ready(f"{url}/api/version")
     name = model["ollama"]
@@ -153,8 +185,13 @@ def stop(proc: subprocess.Popen) -> None:
     try:
         proc.wait(timeout=60)
     except subprocess.TimeoutExpired:
-        proc.kill()
-        proc.wait()
+        pass
+    try:
+        os.killpg(proc.pid, signal.SIGKILL)  # whatever is left in the group, e.g. Ollama's runner
+    except ProcessLookupError:
+        pass
+    proc.wait()
+    SERVERS.discard(proc)
 
 
 def expand(cpus: str) -> list[int]:
@@ -232,13 +269,15 @@ def main() -> None:
     ap.add_argument("--cpus", default="0-15")
     ap.add_argument("--threads", type=int, default=16)
     ap.add_argument("--port", type=int, default=8090)
+    ap.add_argument("--concurrency", type=int, default=1, help="probe requests in flight")
     ap.add_argument("--out", default="results")
     ap.add_argument("--lock", help="flock this file around each setup")
     ap.add_argument("--max-load", type=float, default=3.0)
     ap.add_argument("--yield-to", help="pause while another process holds this lock (probes phase)")
     ap.add_argument("--log", default="/tmp/rigcheck-matrix-server.log")
     args = ap.parse_args()
-    signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))  # run the finally blocks: resume and stop the server
+    signal.pthread_sigmask(signal.SIG_BLOCK, SIGNALS)  # before any thread starts, so only reaper() gets them
+    threading.Thread(target=reaper, daemon=True).start()
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     for key in args.models:
@@ -264,6 +303,7 @@ def main() -> None:
                         sessions=args.sessions if args.phase == "timing" else 0,
                         label=f"{engine} · {model['title']}",
                         fit=args.phase == "probes",
+                        concurrency=args.concurrency,
                         timeout=6 * 3600 if yielder else 900,
                     )
                     res = runner.run(cfg)
