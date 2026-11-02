@@ -17,12 +17,12 @@ from . import project
 from .client import Completion, ToolCall
 from .profiles import PROJECT, Action, Profile
 
-HARD_FAILURES = ("http_error", "length", "markup_in_content", "bad_json", "unknown_tool", "schema_violation")
+HARD_FAILURES = ("http_error", "length", "markup_in_content", "call_as_text", "bad_json", "unknown_tool", "schema_violation")
 
 _MARKUP = re.compile(
     r"<tool_call>|</tool_call>|<function=|</function>|<parameter=|<\|?tool_call|<tool_call\||\[TOOL_CALLS\]"
     r"|<\|channel\|>|<\|call\|>|<\|start\|>|<\|end\|>|<\|im_start\|>|<\|im_end\|>|<\|python_tag\|>|<\|tool_calls_section_begin\|>"
-    r"|<start_function_call>|<｜tool▁call|<tool▁call|<\|tool_code\|>|<\|tool_call_start\|>|\bto=functions\.\w+"
+    r"|<start_function_call>|<｜tool▁call|<tool▁call|<\|tool_code\|>|<\|tool_call_start\|>|\bto=functions\.\w+|<\|\"\|>"
 )
 _THINK = re.compile(r"</?think>")
 
@@ -409,8 +409,10 @@ def hard_checks(c: Completion, profile: Profile) -> tuple[str | None, list[Actio
     details = []
     actions = []
     reason = None
-    if _MARKUP.search(c.content) or _json_call_in_text(c.content, profile):
+    if _MARKUP.search(c.content):
         reason = "markup_in_content"
+    elif _call_in_text(c.content, profile):
+        reason = "call_as_text"
     for tc in c.tool_calls:
         d = {"name": tc.name, "arguments": tc.arguments[:2000]}
         try:
@@ -463,9 +465,17 @@ def _schema_error(schema: dict | None, args: dict) -> str | None:
 _JSON_CALL = re.compile(r'\{\s*"(?:name|function)"\s*:\s*"([\w.\-]+)"')
 
 
-def _json_call_in_text(text: str, profile: Profile) -> bool:
-    """A tool call printed as JSON text instead of sent as a structured call."""
-    return any(m.group(1) in profile.tool_names for m in _JSON_CALL.finditer(text))
+def _call_in_text(text: str, profile: Profile) -> bool:
+    """A tool call written into the reply as text instead of sent as a structured call:
+    JSON ({"name": "read", ...}) or ad-hoc syntax at the start of a line or a bracket
+    (read{...}, [read:src/a.py], grep(pattern: ...))."""
+    if any(m.group(1) in profile.tool_names for m in _JSON_CALL.finditer(text)):
+        return True
+    names = "|".join(re.escape(n) for n in sorted(profile.tool_names, key=len, reverse=True))
+    if not names:
+        return False
+    adhoc = re.compile(rf"(?m)(?:^|\[)\s*(?:{names})\s*(?:\{{|\(\s*\w+\s*[:=]|:\s*[\w./-]+\.\w+)")
+    return adhoc.search(text) is not None
 
 
 def completion_of(row: dict) -> Completion:

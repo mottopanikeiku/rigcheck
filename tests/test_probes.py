@@ -37,8 +37,24 @@ def test_markup_in_text_fails():
     prof = profiles.load("opencode")
     c = Completion(ok=True, content='<tool_call>\n{"name": "read", "arguments": {"filePath": "x"}}\n</tool_call>', finish_reason="stop")
     assert hard_checks(c, prof)[0] == "markup_in_content"
-    c = Completion(ok=True, content='{"name": "read", "arguments": {"filePath": "/home/dev/project/x"}}', finish_reason="stop")
+    c = Completion(ok=True, content='[read{filePath:<|"|>src/app/cache.py<|"|>}]', finish_reason="stop")
     assert hard_checks(c, prof)[0] == "markup_in_content"
+
+
+@pytest.mark.parametrize(
+    "text",
+    ['{"name": "read", "arguments": {"filePath": "/home/dev/project/x"}}', "[read:src/app/cache.py]", '[glob{pattern: "**/*"}]', "grep(pattern: parse_header)"],
+)
+def test_calls_written_as_text_fail(text):
+    prof = profiles.load("opencode")
+    c = Completion(ok=True, content=text, finish_reason="stop")
+    assert hard_checks(c, prof)[0] == "call_as_text"
+
+
+@pytest.mark.parametrize("text", ["It defines chunks(), a generator.", "You can read: the docs.", "[read]", "Both tests pass."])
+def test_plain_answers_are_not_calls(text):
+    prof = profiles.load("opencode")
+    assert hard_checks(Completion(ok=True, content=text, finish_reason="stop"), prof)[0] is None
     c = Completion(ok=True, content="<|channel|>commentary to=functions.read <|message|>{}", finish_reason="stop")
     assert hard_checks(c, prof)[0] == "markup_in_content"
 
