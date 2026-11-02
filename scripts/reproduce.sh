@@ -3,8 +3,9 @@
 #
 #   LLAMA_SERVER=~/llama.cpp/build/bin/llama-server OLLAMA=~/ollama/bin/ollama scripts/reproduce.sh
 #
-# Timed sessions take all 16 cores, one setup at a time, under an exclusive lock on
-# $BENCH_LOCK once the load average is below 5. Pass/fail probes run after, four at a time.
+# Every run gets all 16 cores and a fresh server. Timed sessions hold an exclusive lock on
+# $BENCH_LOCK and wait for a quiet machine (see scripts/matrix.py); probes run one request
+# at a time and freeze while anyone else holds the lock. It takes about a day.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 : "${LLAMA_SERVER:?set LLAMA_SERVER to a llama-server binary}"
@@ -26,12 +27,11 @@ for m in qwen3.5:4b gemma4:e4b gpt-oss:20b qwen3.6:35b; do OLLAMA_HOST=127.0.0.1
 kill "$pid"
 wait "$pid" || true
 
-T="uv run scripts/matrix.py --phase timing --cpus 0-15 --threads 16 --lock $BENCH_LOCK --max-load 5"
-$T --models qwen3.5-4b gemma-4-e4b --sessions 5
-$T --models gpt-oss-20b --engines llama.cpp ollama --sessions 5
-$T --models gpt-oss-20b --engines ollama-64k --sessions 3
-$T --models qwen3.6-35b-a3b --sessions 3
-P="uv run scripts/matrix.py --phase probes --cpus 0-15 --threads 16 --trials 6 --concurrency 4 --yield-to $BENCH_LOCK"
-$P --engines llama.cpp
-$P --engines ollama-64k ollama --ollama-parallel 4
+T="uv run scripts/matrix.py --phase timing --lock $BENCH_LOCK --port 8092"
+$T --engines ollama ollama-64k
+$T --engines llama.cpp
+$T --engines llama.cpp --models qwen3.6-35b-a3b --agents codex qwen-code goose minimal
+P="uv run scripts/matrix.py --phase probes --yield-to $BENCH_LOCK --port 8091"
+$P --engines llama.cpp --agents opencode codex qwen-code goose minimal
+$P --engines ollama-64k ollama
 uv run rigcheck report results/*.json --agent opencode --svg docs/results.svg --md docs/results.md --title "rigcheck: OpenCode on a 16-core Neoverse-V2, CPU only"
