@@ -175,6 +175,22 @@ KNOWN = {
             },
         },
     },
+    "goose": {
+        "roles": {
+            "shell": {"kind": "shell", "fields": {"command": "command"}},
+            "edit": {"kind": "edit", "fields": {"path": "path", "before": "old", "after": "new"}},
+            "write": {"kind": "write", "fields": {"path": "path", "content": "content"}},
+            "tree": {"kind": "list", "fields": {"path": "path"}},
+            "analyze": {"kind": "read", "fields": {"path": "path"}},
+        },
+        "canned": {
+            "read": {"tool": "shell", "args": {"command": "cat {path}"}},
+            "shell": {"tool": "shell", "args": {"command": "{command}"}},
+            "search": {"tool": "shell", "args": {"command": "rg -n '{pattern}'"}},
+            "edit": {"tool": "edit", "args": {"path": "{abspath}", "before": "{old}", "after": "{new}"}},
+            "write": {"tool": "write", "args": {"path": "{abspath}", "content": "{content}"}},
+        },
+    },
     "qwen-code": {
         "roles": {
             "read_file": {"kind": "read", "fields": {"file_path": "path"}},
