@@ -84,3 +84,14 @@ def test_nonce_makes_prompt_unique():
     a = prof.build_messages("hi", nonce="aaaa")
     b = prof.build_messages("hi", nonce="bbbb")
     assert a != b and a[1:] == b[1:]
+
+
+def test_parallel_globs_for_both_files_count():
+    prof = profiles.load("opencode")
+    probe = PROBES["parallel"]
+    inst = probe.instances[1]
+    calls = [ToolCall(i, f"c{i}", "glob", json.dumps({"pattern": f"**/{f.rsplit('/', 1)[-1]}"})) for i, f in enumerate(inst["files"])]
+    c = Completion(ok=True, tool_calls=calls, finish_reason="tool_calls")
+    reason, actions, _ = hard_checks(c, prof)
+    assert reason is None and probe.expect(actions, c, inst) is None
+    assert probe.expect(actions[:1], c, inst) == "one_at_a_time"

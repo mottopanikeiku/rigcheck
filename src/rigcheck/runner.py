@@ -12,7 +12,7 @@ from dataclasses import asdict, dataclass, field
 
 from . import __version__, engine, turns
 from .client import Client
-from .probes import PROBES, hard_checks, soft_warnings
+from .probes import PROBES, score
 from .profiles import Profile, load
 
 
@@ -103,28 +103,27 @@ def _probe_trial(client: Client, cfg: RunConfig, profile: Profile, base: dict, p
     body.update(overrides)
     body["seed"] = cfg.seed * 1000 + trial
     c = client.chat(body, headers={"X-Rigcheck-Probe": f"{probe_id}/{idx}", "X-Rigcheck-Agent": profile.name})
-    reason, actions, calls = hard_checks(c, profile)
-    if reason is None:
-        reason = probe.expect(actions, c, inst)
-    return {
+    row = {
         "probe": probe_id,
         "instance": idx,
         "trial": trial,
-        "pass": reason is None,
-        "reason": reason,
-        "warnings": soft_warnings(c),
-        "calls": calls,
-        "content": c.content[:600],
+        "ok": c.ok,
+        "status": c.status,
+        "error": c.error,
+        "content": c.content,
         "reasoning_chars": len(c.reasoning),
+        "tool_calls": [{"index": t.index, "id": t.id, "name": t.name, "arguments": t.arguments} for t in c.tool_calls],
         "finish_reason": c.finish_reason,
+        "stream_issues": c.stream_issues,
         "prompt_tokens": c.prompt_tokens,
         "completion_tokens": c.completion_tokens,
         "ttft": c.ttft,
         "total": c.total,
         "engine_prompt_n": (c.timings or {}).get("prompt_n"),
         "engine_cache_n": (c.timings or {}).get("cache_n"),
-        "error": c.error,
     }
+    row.update(score(row, profile))
+    return row
 
 
 def run(cfg: RunConfig) -> dict:
@@ -152,7 +151,7 @@ def run(cfg: RunConfig) -> dict:
             profile = load(name)
             base = _base_body(cfg, profile)
             entry: dict = {
-                "profile": {"name": profile.name, "title": profile.title, "version": profile.version, "prompt_chars": profile.prompt_chars()},
+                "profile": {"name": profile.name, "source": name, "title": profile.title, "version": profile.version, "prompt_chars": profile.prompt_chars()},
             }
             if cfg.fit:
                 _log(f"{profile.title}: checking the prompt fits")

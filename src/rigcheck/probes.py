@@ -14,7 +14,7 @@ from typing import Callable
 import jsonschema
 
 from . import project
-from .client import Completion
+from .client import Completion, ToolCall
 from .profiles import PROJECT, Action, Profile
 
 HARD_FAILURES = ("http_error", "length", "markup_in_content", "bad_json", "unknown_tool", "schema_violation")
@@ -466,3 +466,26 @@ _JSON_CALL = re.compile(r'\{\s*"(?:name|function)"\s*:\s*"([\w.\-]+)"')
 def _json_call_in_text(text: str, profile: Profile) -> bool:
     """A tool call printed as JSON text instead of sent as a structured call."""
     return any(m.group(1) in profile.tool_names for m in _JSON_CALL.finditer(text))
+
+
+def completion_of(row: dict) -> Completion:
+    """Rebuild a reply from a stored probe row, so results can be re-scored later."""
+    calls = [ToolCall(t.get("index"), t.get("id"), t.get("name"), t.get("arguments") or "") for t in row.get("tool_calls") or []]
+    return Completion(
+        ok=row["ok"],
+        status=row.get("status"),
+        error=row.get("error"),
+        content=row.get("content") or "",
+        tool_calls=calls,
+        finish_reason=row.get("finish_reason"),
+        stream_issues=list(row.get("stream_issues") or []),
+    )
+
+
+def score(row: dict, profile: Profile) -> dict:
+    probe = PROBES[row["probe"]]
+    c = completion_of(row)
+    reason, actions, calls = hard_checks(c, profile)
+    if reason is None:
+        reason = probe.expect(actions, c, probe.instances[row["instance"]])
+    return {"pass": reason is None, "reason": reason, "warnings": soft_warnings(c), "calls": calls}

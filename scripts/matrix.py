@@ -148,6 +148,7 @@ class Yield(threading.Thread):
 
 
 def stop(proc: subprocess.Popen) -> None:
+    os.killpg(proc.pid, signal.SIGCONT)
     proc.send_signal(signal.SIGINT)
     try:
         proc.wait(timeout=60)
@@ -225,6 +226,7 @@ def main() -> None:
     ap.add_argument("--yield-to", help="pause while another process holds this lock (probes phase)")
     ap.add_argument("--log", default="/tmp/rigcheck-matrix-server.log")
     args = ap.parse_args()
+    signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))  # run the finally blocks: resume and stop the server
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     for key in args.models:

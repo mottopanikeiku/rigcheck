@@ -6,8 +6,8 @@ import html as _html
 import math
 from collections import Counter, defaultdict
 
-from . import stats, turns
-from .probes import PROBES
+from . import profiles, stats, turns
+from .probes import PROBES, score
 
 
 def _model_name(res: dict) -> str:
@@ -19,7 +19,7 @@ def summarize(res: dict) -> list[dict]:
     rows = []
     ep = res["endpoint"]
     for name, a in res["agents"].items():
-        probes = a.get("probes", [])
+        probes = _rescored(a)
         k = sum(r["pass"] for r in probes)
         n = len(probes)
         lo, hi = stats.wilson(k, n)
@@ -80,6 +80,16 @@ def summarize(res: dict) -> list[dict]:
             }
         )
     return rows
+
+
+def _rescored(agent: dict) -> list[dict]:
+    """Score stored replies with the current rules (falls back to the stored verdicts)."""
+    rows = agent.get("probes", [])
+    try:
+        prof = profiles.load(agent["profile"].get("source") or agent["profile"]["name"])
+    except (SystemExit, OSError, KeyError, ValueError):
+        return rows
+    return [{**r, **score(r, prof)} if "tool_calls" in r else r for r in rows]
 
 
 # ---------------------------------------------------------------- formatting helpers

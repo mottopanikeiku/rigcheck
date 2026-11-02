@@ -32,7 +32,7 @@ class Action:
         for p in self.paths:
             if p.rstrip("/").endswith(name) or p.rsplit("/", 1)[-1] == base:
                 return True
-        return bool(self.command) and base in self.command
+        return (bool(self.command) and base in self.command) or (self.kind in ("list", "search") and base in self.pattern)
 
 
 @dataclass

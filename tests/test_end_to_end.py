@@ -86,3 +86,11 @@ def test_cli_run_report_compare(url, tmp_path, capsys):
     main(["compare", str(a), str(b)])
     out = capsys.readouterr().out
     assert "McNemar" in out and "warm turns first token" in out
+
+
+def test_summary_rescores_stored_replies(url):
+    res = _run(url, "good", agents=("minimal",), sessions=0, trials=1)
+    for r in res["agents"]["minimal"]["probes"]:
+        r["pass"], r["reason"] = False, "stale"
+    (row,) = report.summarize(res)
+    assert row["pass"] == row["n"] == 9
