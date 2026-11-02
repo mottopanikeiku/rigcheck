@@ -1,7 +1,6 @@
 """The whole pipeline against the mock server: run, summarize, render, compare."""
 
 import json
-import math
 
 import pytest
 
@@ -30,7 +29,7 @@ def test_good_server_passes_everything(url):
         assert row["fit"] == "fits"
         assert row["pass"] == row["n"] == 27, row["reasons"]
         assert not row["warnings"]
-        assert row["prefix_reuse"][0] > 0.8
+        assert row["cache_misses"] == (0, 8)
         if row["agent"] != "minimal":
             assert row["warm_over_cold"][0] < 0.5
 
@@ -39,7 +38,7 @@ def test_cache_miss_shows_up_in_warm_turns(url):
     res = _run(url, "nocache", agents=("qwen-code",), trials=0, sessions=3)
     (row,) = report.summarize(res)
     assert row["warm_over_cold"][0] > 1.0
-    assert row["prefix_reuse"][0] < 0.2
+    assert row["cache_misses"] == (12, 12)
     assert row["engine_cache_share"] == 0
 
 
@@ -66,7 +65,7 @@ def test_truncated_prompt_is_flagged(url):
     res = _run(url, "truncate", agents=("qwen-code",), trials=0, sessions=2, fit=False)
     (row,) = report.summarize(res)
     assert row["fit"] == "truncated" and row["prompt_tokens"] == 4096
-    assert math.isnan(row["prefix_reuse"][0])
+    assert row["cache_misses"] == (0, 0)
 
 
 def test_non_streaming_path(url):

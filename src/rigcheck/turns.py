@@ -3,10 +3,9 @@ real prompt and tools. Turn 1 starts with a unique nonce, so nothing can come fr
 turns 2-5 only append a tool call and its result, so a working prefix cache should make
 them pay only for the new tokens.
 
-Prefix reuse is estimated from timing alone, so it works on any engine: turn 1 gives the
-cold prefill speed, and a warm turn's first-token time says how much of its prompt was
-really processed. 100% means everything sent before was reused; 0% means the whole
-prompt was processed again."""
+Cache misses are judged from timing alone, so it works on any engine: turn 1 gives the
+cold cost of the prompt, and a warm turn that takes at least MISS of what re-reading its
+whole prompt cold would take re-read it (or most of it)."""
 
 from __future__ import annotations
 
@@ -81,24 +80,19 @@ def run_session(client: Client, profile: Profile, base: dict, session: int, log=
     return rows
 
 
-def prefix_reuse(session_rows: list[dict]) -> list[float]:
-    """Estimated share of the previous prompt each warm turn reused (see module doc).
+MISS = 0.75
 
-    Uses the engine's prompt token counts when it reports them, else characters. A
-    session whose prompt stops growing was truncated by the engine; the estimate means
-    nothing there and is skipped."""
+
+def cache_misses(session_rows: list[dict]) -> tuple[int, int]:
+    """(warm turns that re-read most of their prompt, warm turns). A session whose prompt
+    stops growing was truncated by the engine and is skipped."""
     rows = sorted((r for r in session_rows if r["ok"] and r["ttft"]), key=lambda r: r["turn"])
-    if not rows or rows[0]["turn"] != 1:
-        return []
+    if len(rows) < 2 or rows[0]["turn"] != 1:
+        return (0, 0)
     key = "prompt_tokens" if all(r.get("prompt_tokens") for r in rows) else "prompt_chars"
     sizes = [r[key] for r in rows]
     if key == "prompt_tokens" and any(b <= a for a, b in zip(sizes, sizes[1:])):
-        return []
+        return (0, 0)
     t1, n1 = rows[0]["ttft"], rows[0][key]
-    out = []
-    for prev, cur in zip(rows, rows[1:]):
-        if cur["turn"] != prev["turn"] + 1:
-            break
-        processed = cur["ttft"] / t1 * n1
-        out.append(min(1.0, max(0.0, (cur[key] - processed) / prev[key])))
-    return out
+    misses = sum(r["ttft"] >= MISS * t1 * r[key] / n1 for r in rows[1:])
+    return (misses, len(rows) - 1)

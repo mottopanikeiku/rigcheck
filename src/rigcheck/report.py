@@ -37,7 +37,7 @@ def summarize(res: dict) -> list[dict]:
         warm = [[t["ttft"] for t in s if t["turn"] > 1] for s in sessions.values()]
         dec = [[t["decode_tps"] for t in s if t["decode_tps"] and (t["completion_tokens"] or 0) >= 16] for s in sessions.values()]
         session_wait = [[sum(t["ttft"] for t in s)] for s in sessions.values() if len(s) >= 2]
-        reuse = [turns.prefix_reuse(s) for s in sessions.values()]
+        misses = [turns.cache_misses(s) for s in sessions.values()]
         cache_share = [
             t["engine_cache_n"] / (t["engine_cache_n"] + t["engine_prompt_n"])
             for s in sessions.values()
@@ -74,7 +74,7 @@ def summarize(res: dict) -> list[dict]:
                 "warm_over_cold": stats.ratio_of_medians(warm, cold),
                 "decode_tps": stats.bootstrap(dec),
                 "session_wait": stats.bootstrap(session_wait),
-                "prefix_reuse": stats.bootstrap(reuse),
+                "cache_misses": (sum(m for m, _ in misses), sum(n for _, n in misses)),
                 "engine_cache_share": stats.quantile(cache_share, 0.5) if cache_share else None,
                 "max_turn_prompt": max(turn_prompt) if turn_prompt else None,
             }
@@ -140,6 +140,11 @@ def rate_ci(r: dict) -> str:
     return f"{pct(r['rate'])} [{pct(r['lo'])}, {pct(r['hi'])}] n={r['n']}"
 
 
+def frac(kn: tuple[int, int]) -> str:
+    k, n = kn
+    return f"{k}/{n}" if n else "-"
+
+
 def tps(x: float) -> str:
     return "-" if x is None or math.isnan(x) else f"{x:.1f}"
 
@@ -152,7 +157,7 @@ def setup_name(r: dict) -> str:
 
 
 def terminal(rows: list[dict]) -> str:
-    head = ["setup", "agent", "prompt", "tool calls (95% CI)", "cold turn", "warm turn", "prefix reuse", "decode tok/s"]
+    head = ["setup", "agent", "prompt", "tool calls (95% CI)", "cold turn", "warm turn", "cache misses", "decode tok/s"]
     body = []
     for r in rows:
         fit = ktok(r["prompt_tokens"]) + ("" if r["fit"] in ("fits", None) else f" {str(r['fit']).upper()}")
@@ -164,7 +169,7 @@ def terminal(rows: list[dict]) -> str:
                 rate_ci(r),
                 interval(r["cold_ttft"]),
                 interval(r["warm_ttft"]),
-                interval(r["prefix_reuse"], pct),
+                frac(r["cache_misses"]),
                 interval(r["decode_tps"], tps),
             ]
         )
@@ -188,14 +193,14 @@ def markdown(rows: list[dict], svg_path: str | None = None) -> str:
     if svg_path:
         out += [f"![results]({svg_path})", ""]
     out += [
-        "| Setup | Agent | Prompt | Tool calls pass (95% CI) | Cold turn | Warm turn | Prefix reuse | Decode tok/s |",
+        "| Setup | Agent | Prompt | Tool calls pass (95% CI) | Cold turn | Warm turn | Cache misses | Decode tok/s |",
         "|---|---|---:|---|---:|---:|---:|---:|",
     ]
     for r in rows:
         fit = ktok(r["prompt_tokens"]) + ("" if r["fit"] in ("fits", None) else f" **{r['fit']}**")
         out.append(
             f"| {setup_name(r)} | {r['agent']} | {fit} | {rate_ci(r)} | {interval(r['cold_ttft'])} | {interval(r['warm_ttft'])} "
-            f"| {interval(r['prefix_reuse'], pct)} | {interval(r['decode_tps'], tps)} |"
+            f"| {frac(r['cache_misses'])} | {interval(r['decode_tps'], tps)} |"
         )
     probe_ids = [p for p in PROBES if any(p in r["by_probe"] for r in rows)]
     if probe_ids:
