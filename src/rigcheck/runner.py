@@ -35,6 +35,7 @@ class RunConfig:
     api_key: str | None = None
     timeout: float = 900.0
     label: str | None = None
+    fit: bool = True
 
 
 def _log(msg: str) -> None:
@@ -120,6 +121,8 @@ def _probe_trial(client: Client, cfg: RunConfig, profile: Profile, base: dict, p
         "completion_tokens": c.completion_tokens,
         "ttft": c.ttft,
         "total": c.total,
+        "engine_prompt_n": (c.timings or {}).get("prompt_n"),
+        "engine_cache_n": (c.timings or {}).get("cache_n"),
         "error": c.error,
     }
 
@@ -151,10 +154,11 @@ def run(cfg: RunConfig) -> dict:
             entry: dict = {
                 "profile": {"name": profile.name, "title": profile.title, "version": profile.version, "prompt_chars": profile.prompt_chars()},
             }
-            _log(f"{profile.title}: checking the prompt fits")
-            entry["fit"] = fit_check(client, cfg, profile, info)
-            f = entry["fit"]
-            _log(f"  {f['verdict']}: engine counted {f['prompt_tokens']} prompt tokens (floor {f['floor_tokens']}, context {f['context']})")
+            if cfg.fit:
+                _log(f"{profile.title}: checking the prompt fits")
+                entry["fit"] = fit_check(client, cfg, profile, info)
+                f = entry["fit"]
+                _log(f"  {f['verdict']}: engine counted {f['prompt_tokens']} prompt tokens (floor {f['floor_tokens']}, context {f['context']})")
             jobs = [(p, t) for p in cfg.probes for t in range(cfg.trials)]
             rows: list[dict] = []
             if jobs:
