@@ -114,3 +114,28 @@ def test_parallel_globs_for_both_files_count():
     reason, actions, _ = hard_checks(c, prof)
     assert reason is None and probe.expect(actions, c, inst) is None
     assert probe.expect(actions[:1], c, inst) == "one_at_a_time"
+
+
+def test_looking_around_first_is_not_counted():
+    from rigcheck.probes import score
+
+    row = {
+        "probe": "long_write",
+        "instance": 0,
+        "ok": True,
+        "content": "",
+        "finish_reason": "tool_calls",
+        "tool_calls": [{"index": 0, "id": "a", "name": "glob", "arguments": '{"pattern": "scripts/*"}'}],
+    }
+    assert score(row, profiles.load("opencode"))["pass"] is None
+    row["tool_calls"][0] = {"index": 0, "id": "a", "name": "bash", "arguments": '{"command": "rm -rf scripts"}'}
+    assert score(row, profiles.load("opencode"))["pass"] is False
+    row = {
+        "probe": "read_first",
+        "instance": 2,
+        "ok": True,
+        "content": "",
+        "finish_reason": "tool_calls",
+        "tool_calls": [{"index": 0, "id": "a", "name": "glob", "arguments": '{"pattern": "cache", "path": "src/app"}'}],
+    }
+    assert score(row, profiles.load("opencode"))["pass"] is True

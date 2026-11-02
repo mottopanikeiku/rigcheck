@@ -19,7 +19,9 @@ def summarize(res: dict) -> list[dict]:
     rows = []
     ep = res["endpoint"]
     for name, a in res["agents"].items():
-        probes = _rescored(a)
+        scored = _rescored(a)
+        probes = [r for r in scored if r["pass"] is not None]
+        explored = len(scored) - len(probes)
         k = sum(r["pass"] for r in probes)
         n = len(probes)
         lo, hi = stats.wilson(k, n)
@@ -67,6 +69,7 @@ def summarize(res: dict) -> list[dict]:
                 "hi": hi,
                 "by_probe": dict(by_probe),
                 "reasons": dict(reasons.most_common()),
+                "explored": explored,
                 "warnings": dict(warnings.most_common()),
                 "sessions": len(sessions),
                 "cold_ttft": stats.bootstrap(cold),
@@ -183,10 +186,11 @@ def terminal(rows: list[dict]) -> str:
     lines.append("  ".join("-" * w for w in widths))
     lines += ["  ".join(str(x).ljust(w) for x, w in zip(row, widths)) for row in body]
     for r in rows:
-        if r["reasons"] or r["warnings"]:
+        if r["reasons"] or r["warnings"] or r["explored"]:
             fails = ", ".join(f"{k} {v}" for k, v in r["reasons"].items()) or "none"
             warns = ", ".join(f"{k} {v}" for k, v in r["warnings"].items()) or "none"
-            lines.append(f"{setup_name(r)} / {r['agent']}: failures: {fails}; warnings: {warns}")
+            extra = f"; explored first (not counted) {r['explored']}" if r["explored"] else ""
+            lines.append(f"{setup_name(r)} / {r['agent']}: failures: {fails}; warnings: {warns}{extra}")
     return "\n".join(lines)
 
 
@@ -219,13 +223,14 @@ def markdown(rows: list[dict], svg_path: str | None = None) -> str:
                 cells.append(f"{k}/{n}" if n else "-")
             out.append(f"| {setup_name(r)} | {r['agent']} | " + " | ".join(cells) + " |")
         out += ["", "Probes: " + "; ".join(f"`{p}` {PROBES[p].checks}" for p in probe_ids) + "."]
-    fails = [r for r in rows if r["reasons"] or r["warnings"]]
+    fails = [r for r in rows if r["reasons"] or r["warnings"] or r["explored"]]
     if fails:
         out += ["", "## Failures and warnings", ""]
         for r in fails:
             f = ", ".join(f"{k} ×{v}" for k, v in r["reasons"].items()) or "none"
             w = ", ".join(f"{k} ×{v}" for k, v in r["warnings"].items()) or "none"
-            out.append(f"- {setup_name(r)} / {r['agent']}: failures {f}; warnings {w}")
+            e = f"; explored first, not counted ×{r['explored']}" if r["explored"] else ""
+            out.append(f"- {setup_name(r)} / {r['agent']}: failures {f}; warnings {w}{e}")
     return "\n".join(out) + "\n"
 
 

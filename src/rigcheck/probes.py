@@ -61,6 +61,13 @@ def _any(actions: list[Action], pred) -> bool:
     return any(pred(a) for a in actions)
 
 
+EXPLORED = "explored"  # only looked around first; the probe's move was never tested
+
+
+def _explored(actions: list[Action]) -> bool:
+    return bool(actions) and all(a.kind in ("read", "list", "search") for a in actions)
+
+
 # ---------------------------------------------------------------- probes
 
 
@@ -74,9 +81,12 @@ def _read_first() -> Probe:
     def expect(actions, c, i):
         if not actions:
             return "no_call"
+        stem = i["file"].rsplit("/", 1)[-1].split(".")[0]
         if _any(actions, lambda a: a.touches(i["file"]) or i["symbol"] in (a.pattern + a.command)):
             return None
-        return "wrong_action"
+        if _any(actions, lambda a: a.kind in ("list", "search") and stem in a.pattern + " ".join(a.paths) + a.command):
+            return None  # looking for the file is the right move too
+        return EXPLORED if _explored(actions) else "wrong_action"
 
     return Probe(
         "read_first",
@@ -128,7 +138,7 @@ def _search() -> Probe:
             return "no_call"
         if _any(actions, lambda a: i["symbol"] in (a.pattern + a.command) or (a.kind == "read" and a.touches(i["file"]))):
             return None
-        return "wrong_action"
+        return EXPLORED if _explored(actions) else "wrong_action"
 
     return Probe(
         "search",
@@ -382,7 +392,9 @@ def _long_write() -> Probe:
     def expect(actions, c, i):
         if not actions:
             return "no_call"
-        return None if _any(actions, lambda a: wrote(a, i)) else "no_complete_file"
+        if _any(actions, lambda a: wrote(a, i)):
+            return None
+        return EXPLORED if _explored(actions) else "no_complete_file"
 
     return Probe(
         "long_write",
@@ -498,4 +510,5 @@ def score(row: dict, profile: Profile) -> dict:
     reason, actions, calls = hard_checks(c, profile)
     if reason is None:
         reason = probe.expect(actions, c, probe.instances[row["instance"]])
-    return {"pass": reason is None, "reason": reason, "warnings": soft_warnings(c), "calls": calls}
+    passed = None if reason == EXPLORED else reason is None
+    return {"pass": passed, "reason": reason, "warnings": soft_warnings(c), "calls": calls}

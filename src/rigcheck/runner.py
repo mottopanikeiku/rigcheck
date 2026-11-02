@@ -171,7 +171,7 @@ def run(cfg: RunConfig) -> dict:
                     for fut in futs:
                         r = fut.result()
                         rows.append(r)
-                        mark = "pass" if r["pass"] else f"FAIL {r['reason']}"
+                        mark = "pass" if r["pass"] else r["reason"] if r["pass"] is None else f"FAIL {r['reason']}"
                         _log(f"  {r['probe']:<16} #{r['trial']:<3} {mark}")
             entry["probes"] = rows
             sessions = []

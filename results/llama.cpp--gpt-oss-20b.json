@@ -62,7 +62,1796 @@
     "version": "1.19.5",
     "prompt_chars": 30911
    },
-   "probes": [],
+   "probes": [
+    {
+     "probe": "read_first",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 98,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "ookXbaOSYJP2WxEzTQSBVh0q2scVmdkx",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"settings.py\",\"path\":\"src\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6036,
+     "completion_tokens": 52,
+     "ttft": 114.73353464301908,
+     "total": 116.68531609600177,
+     "engine_prompt_n": 6036,
+     "engine_cache_n": 0,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"settings.py\",\"path\":\"src\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "read_first",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 109,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "CRNcG9GzepEdEGTsklPWHPcK40vK9BP9",
+       "name": "grep",
+       "arguments": "{\"pattern\":\"def get_invoice\",\"include\":\"src/**/*.py\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6038,
+     "completion_tokens": 56,
+     "ttft": 427.93223540100735,
+     "total": 441.8580874520121,
+     "engine_prompt_n": 22,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "grep",
+       "arguments": "{\"pattern\":\"def get_invoice\",\"include\":\"src/**/*.py\"}",
+       "action": "search"
+      }
+     ]
+    },
+    {
+     "probe": "read_first",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 43,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "R9gZvHMtYRxo1ysCpXHYRViOGop2b1sR",
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/cache.py\",\"offset\":1,\"limit\":200}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6036,
+     "completion_tokens": 50,
+     "ttft": 428.98418808198767,
+     "total": 441.2165661799954,
+     "engine_prompt_n": 6036,
+     "engine_cache_n": 0,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/cache.py\",\"offset\":1,\"limit\":200}",
+       "action": "read"
+      }
+     ]
+    },
+    {
+     "probe": "read_first",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 36,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "7IHI7XG1yFPU81HOPgQ8ATU03HibkHIM",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"src/app/settings.py\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6036,
+     "completion_tokens": 35,
+     "ttft": 405.03892592102056,
+     "total": 435.11905211000703,
+     "engine_prompt_n": 6036,
+     "engine_cache_n": 0,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"src/app/settings.py\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "read_first",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 39,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "t4XnkXQ5QuE2PKM3X6Gtzpzx7bm2e9h2",
+       "name": "read",
+       "arguments": "{\"filePath\":\"src/app/http_client.py\",\"offset\":1,\"limit\":2000}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6038,
+     "completion_tokens": 47,
+     "ttft": 428.2449823800125,
+     "total": 439.217363852018,
+     "engine_prompt_n": 6038,
+     "engine_cache_n": 0,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "read",
+       "arguments": "{\"filePath\":\"src/app/http_client.py\",\"offset\":1,\"limit\":2000}",
+       "action": "read"
+      }
+     ]
+    },
+    {
+     "probe": "read_first",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 64,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "EBP1amT0UudBS7dSWzh0OYWK06QiV6R1",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"cache\",\"path\":\"src/app\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6036,
+     "completion_tokens": 44,
+     "ttft": 2.1164244430256076,
+     "total": 12.952561310026795,
+     "engine_prompt_n": 20,
+     "engine_cache_n": 6016,
+     "pass": false,
+     "reason": "wrong_action",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"cache\",\"path\":\"src/app\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "run_command",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 83,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "evoTJ8YOwBZbL8tZkIOeAWmOrTT6V41K",
+       "name": "bash",
+       "arguments": "{\"command\":\"pytest tests/test_parser.py -q\",\"timeout\":120000}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6042,
+     "completion_tokens": 55,
+     "ttft": 2.223156582971569,
+     "total": 15.907918393961154,
+     "engine_prompt_n": 26,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "bash",
+       "arguments": "{\"command\":\"pytest tests/test_parser.py -q\",\"timeout\":120000}",
+       "action": "shell"
+      }
+     ]
+    },
+    {
+     "probe": "run_command",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 51,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "cfoo4jm8t2cc6ElTXxfdyJ1nRJ94Pzjg",
+       "name": "bash",
+       "arguments": "{\"command\":\"git status\",\"timeout\":120000}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6032,
+     "completion_tokens": 42,
+     "ttft": 1.9505354820284992,
+     "total": 11.890051255002618,
+     "engine_prompt_n": 12,
+     "engine_cache_n": 6020,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "bash",
+       "arguments": "{\"command\":\"git status\",\"timeout\":120000}",
+       "action": "shell"
+      }
+     ]
+    },
+    {
+     "probe": "run_command",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 44,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "KwPdAqkYHJ1Av3ZN60DnXsNdhgfcT83Z",
+       "name": "bash",
+       "arguments": "{\"command\":\"git log --oneline -10\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6030,
+     "completion_tokens": 44,
+     "ttft": 2.043485274014529,
+     "total": 12.459323022980243,
+     "engine_prompt_n": 14,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "bash",
+       "arguments": "{\"command\":\"git log --oneline -10\"}",
+       "action": "shell"
+      }
+     ]
+    },
+    {
+     "probe": "run_command",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 86,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "Q7E4uTGzfRrM066aGfEPGqNkONC3uqpG",
+       "name": "bash",
+       "arguments": "{\"command\":\"pytest tests/test_parser.py\",\"timeout\":120000}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6042,
+     "completion_tokens": 53,
+     "ttft": 2.3358751000487246,
+     "total": 14.644898498023394,
+     "engine_prompt_n": 26,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "bash",
+       "arguments": "{\"command\":\"pytest tests/test_parser.py\",\"timeout\":120000}",
+       "action": "shell"
+      }
+     ]
+    },
+    {
+     "probe": "run_command",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 43,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "SbrqfxRKp0Gm05zeMGrySSukBkcvJTJx",
+       "name": "bash",
+       "arguments": "{\"command\":\"git status\",\"timeout\":120000}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6032,
+     "completion_tokens": 41,
+     "ttft": 1.210683839977719,
+     "total": 10.836566671961918,
+     "engine_prompt_n": 1,
+     "engine_cache_n": 6031,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "bash",
+       "arguments": "{\"command\":\"git status\",\"timeout\":120000}",
+       "action": "shell"
+      }
+     ]
+    },
+    {
+     "probe": "run_command",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 68,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "8lrsK7tg3Y0h7g8qTtobZjjwN8bnhNoE",
+       "name": "bash",
+       "arguments": "{\"command\":\"git log --oneline -3\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6030,
+     "completion_tokens": 48,
+     "ttft": 1.7223719309549779,
+     "total": 12.08431040897267,
+     "engine_prompt_n": 5,
+     "engine_cache_n": 6025,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "bash",
+       "arguments": "{\"command\":\"git log --oneline -3\"}",
+       "action": "shell"
+      }
+     ]
+    },
+    {
+     "probe": "search",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 62,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "WRIrsSHx1pXbuIfIHYpxZXlFmJ3SzKxy",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"parse_header\",\"path\":\"/home/dev/project\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6030,
+     "completion_tokens": 45,
+     "ttft": 1.9628703360212967,
+     "total": 11.449451443972066,
+     "engine_prompt_n": 14,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"parse_header\",\"path\":\"/home/dev/project\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "search",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 104,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "PGHZwttLn3WZCuO8OC7ppru6tBr5owrG",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"REQUEST_TIMEOUT\",\"path\":\".\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6029,
+     "completion_tokens": 48,
+     "ttft": 2.1080462700338103,
+     "total": 11.887080237036571,
+     "engine_prompt_n": 13,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"REQUEST_TIMEOUT\",\"path\":\".\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "search",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 176,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "D2gDft7ledp8YJRg7OwmDfpmn8iFKSc5",
+       "name": "grep",
+       "arguments": "{\"pattern\":\"requests\",\"include\":\"*\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6029,
+     "completion_tokens": 66,
+     "ttft": 1.5428008330054581,
+     "total": 27.012704566994216,
+     "engine_prompt_n": 9,
+     "engine_cache_n": 6020,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "grep",
+       "arguments": "{\"pattern\":\"requests\",\"include\":\"*\"}",
+       "action": "search"
+      }
+     ]
+    },
+    {
+     "probe": "search",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 87,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "lvbAxKDz3l8m5Zm3CHlex4UHxxggcWnf",
+       "name": "grep",
+       "arguments": "{\"pattern\":\"parse_header\",\"include\":\"*.*\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6030,
+     "completion_tokens": 51,
+     "ttft": 1.304752217954956,
+     "total": 24.075031144951936,
+     "engine_prompt_n": 5,
+     "engine_cache_n": 6025,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "grep",
+       "arguments": "{\"pattern\":\"parse_header\",\"include\":\"*.*\"}",
+       "action": "search"
+      }
+     ]
+    },
+    {
+     "probe": "search",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 62,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "4RA3BzT9cu3UX8qQdazu1pQSHi73Rwoe",
+       "name": "grep",
+       "arguments": "{\"pattern\":\"REQUEST_TIMEOUT\",\"include\":\"**/*.*\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6029,
+     "completion_tokens": 45,
+     "ttft": 1.3739475350012071,
+     "total": 11.785262771998532,
+     "engine_prompt_n": 13,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "grep",
+       "arguments": "{\"pattern\":\"REQUEST_TIMEOUT\",\"include\":\"**/*.*\"}",
+       "action": "search"
+      }
+     ]
+    },
+    {
+     "probe": "search",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 143,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "cHEDVKCSfe5lm6HgV4o5ENITTlh3aNnO",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"**/*.py\",\"path\":\"/home/dev/project\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6029,
+     "completion_tokens": 59,
+     "ttft": 1.970341582025867,
+     "total": 44.579377559013665,
+     "engine_prompt_n": 13,
+     "engine_cache_n": 6016,
+     "pass": false,
+     "reason": "wrong_action",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"**/*.py\",\"path\":\"/home/dev/project\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "edit_after_read",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 174,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "ap64dmpXsAL8WXQDJRsi329powDGAybe",
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/mathutil.py\",\"oldString\":\"return sum(xs) / (len(xs) - 1)\",\"newString\":\"return sum(xs) / len(xs)\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6166,
+     "completion_tokens": 102,
+     "ttft": 12.59327149001183,
+     "total": 65.91079660999821,
+     "engine_prompt_n": 150,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/mathutil.py\",\"oldString\":\"return sum(xs) / (len(xs) - 1)\",\"newString\":\"return sum(xs) / len(xs)\"}",
+       "action": "edit"
+      }
+     ]
+    },
+    {
+     "probe": "edit_after_read",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 94,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "OweZY1cY4jdvZDunKBEBBxMIatApm5Lo",
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/settings.py\",\"oldString\":\"RETRY_LIMIT = 5\",\"newString\":\"RETRY_LIMIT = 3\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6128,
+     "completion_tokens": 77,
+     "ttft": 19.99196781095816,
+     "total": 48.88152872095816,
+     "engine_prompt_n": 112,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/settings.py\",\"oldString\":\"RETRY_LIMIT = 5\",\"newString\":\"RETRY_LIMIT = 3\"}",
+       "action": "edit"
+      }
+     ]
+    },
+    {
+     "probe": "edit_after_read",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 303,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "Fm8F60qf3QoPIELXdikLzAo7cOKV5wVC",
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/parser.py\",\"oldString\":\"    2\\t    key, _, value = line.partition(\\\":\\\")\",\"newString\":\"    2\\t    key, _, value = line.partition(\\\":\\\")\",\"replaceAll\":false}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6165,
+     "completion_tokens": 142,
+     "ttft": 19.7545978249982,
+     "total": 76.6279532139888,
+     "engine_prompt_n": 145,
+     "engine_cache_n": 6020,
+     "pass": false,
+     "reason": "no_correct_edit",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/parser.py\",\"oldString\":\"    2\\t    key, _, value = line.partition(\\\":\\\")\",\"newString\":\"    2\\t    key, _, value = line.partition(\\\":\\\")\",\"replaceAll\":false}",
+       "action": "edit"
+      }
+     ]
+    },
+    {
+     "probe": "edit_after_read",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 98,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "nBhFwBc5y3XKXelMl0M55wObBELlA0Yf",
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/mathutil.py\",\"oldString\":\"    return sum(xs) / (len(xs) - 1)\",\"newString\":\"    return sum(xs) / len(xs)\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6166,
+     "completion_tokens": 90,
+     "ttft": 12.870259098999668,
+     "total": 44.79097070498392,
+     "engine_prompt_n": 150,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/mathutil.py\",\"oldString\":\"    return sum(xs) / (len(xs) - 1)\",\"newString\":\"    return sum(xs) / len(xs)\"}",
+       "action": "edit"
+      }
+     ]
+    },
+    {
+     "probe": "edit_after_read",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 81,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "8cRmIfNxzFAccjV9o8NvSRIdTr4CsDmj",
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/settings.py\",\"oldString\":\"RETRY_LIMIT = 5\",\"newString\":\"RETRY_LIMIT = 3\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6128,
+     "completion_tokens": 72,
+     "ttft": 1.5099100029910915,
+     "total": 38.854204467032105,
+     "engine_prompt_n": 5,
+     "engine_cache_n": 6123,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/settings.py\",\"oldString\":\"RETRY_LIMIT = 5\",\"newString\":\"RETRY_LIMIT = 3\"}",
+       "action": "edit"
+      }
+     ]
+    },
+    {
+     "probe": "edit_after_read",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 461,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "YQW05YbhOPFiaXpa139gYB2riGepzwvn",
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/parser.py\",\"oldString\":\"return key.strip().lower(), value.strip()\",\"newString\":\"return key.strip(), value.strip()\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6165,
+     "completion_tokens": 163,
+     "ttft": 12.661353958013933,
+     "total": 71.76011987100355,
+     "engine_prompt_n": 149,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "edit",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/parser.py\",\"oldString\":\"return key.strip().lower(), value.strip()\",\"newString\":\"return key.strip(), value.strip()\"}",
+       "action": "edit"
+      }
+     ]
+    },
+    {
+     "probe": "stop_when_done",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "2 passed in 0.03s",
+     "reasoning_chars": 77,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6076,
+     "completion_tokens": 39,
+     "ttft": 2.8675779310287908,
+     "total": 21.162058480025735,
+     "engine_prompt_n": 60,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "stop_when_done",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "`src/app/utils.py` defines a helper that splits an iterable into consecutive chunks of size\u202f*n*:\n\n```python\ndef chunks(xs, n):\n    for i in range(0, len(xs), n):\n        yield xs[i:i+n]\n```\nIt yields each sub\u2011list of length\u202f*n* (last chunk may be shorter).",
+     "reasoning_chars": 196,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6112,
+     "completion_tokens": 132,
+     "ttft": 10.14595457201358,
+     "total": 52.29013284901157,
+     "engine_prompt_n": 93,
+     "engine_cache_n": 6019,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "stop_when_done",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "Yes.",
+     "reasoning_chars": 138,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6074,
+     "completion_tokens": 44,
+     "ttft": 2.806772862037178,
+     "total": 12.560411618032958,
+     "engine_prompt_n": 58,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "stop_when_done",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "All tests passed.",
+     "reasoning_chars": 32,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6076,
+     "completion_tokens": 21,
+     "ttft": 1.521426890976727,
+     "total": 5.634797066973988,
+     "engine_prompt_n": 5,
+     "engine_cache_n": 6071,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "stop_when_done",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "`src/app/utils.py` provides a small helper that splits an iterable into consecutive chunks of size\u202f`n`. The `chunks(xs, n)` generator yields slices `xs[i:i+n]` for each start index `i` in steps of `n`.",
+     "reasoning_chars": 278,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6112,
+     "completion_tokens": 119,
+     "ttft": 10.75472794502275,
+     "total": 40.18452909204643,
+     "engine_prompt_n": 96,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "stop_when_done",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "yes, working tree clean.",
+     "reasoning_chars": 92,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6074,
+     "completion_tokens": 37,
+     "ttft": 10.513373025052715,
+     "total": 18.555162252043374,
+     "engine_prompt_n": 5,
+     "engine_cache_n": 6069,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "no_tool",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "404 means the requested resource was not found on the server.",
+     "reasoning_chars": 406,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6035,
+     "completion_tokens": 110,
+     "ttft": 2.0773201810079627,
+     "total": 29.169909315009136,
+     "engine_prompt_n": 19,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "no_tool",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "A list is mutable, allowing element modification, while a tuple is immutable and its contents cannot be changed after creation.",
+     "reasoning_chars": 323,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6039,
+     "completion_tokens": 104,
+     "ttft": 2.1473796979989856,
+     "total": 28.660271919041406,
+     "engine_prompt_n": 23,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "no_tool",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "You're welcome!",
+     "reasoning_chars": 57,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6030,
+     "completion_tokens": 27,
+     "ttft": 1.690512272005435,
+     "total": 7.343490930041298,
+     "engine_prompt_n": 12,
+     "engine_cache_n": 6018,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "no_tool",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "404 indicates that the requested resource could not be found on the server.",
+     "reasoning_chars": 70,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6035,
+     "completion_tokens": 40,
+     "ttft": 1.7761409470112994,
+     "total": 10.720947160967626,
+     "engine_prompt_n": 15,
+     "engine_cache_n": 6020,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "no_tool",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "A tuple is immutable while a list is mutable.",
+     "reasoning_chars": 51,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6039,
+     "completion_tokens": 34,
+     "ttft": 2.179479637008626,
+     "total": 9.859346476034261,
+     "engine_prompt_n": 23,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "no_tool",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "You're welcome!",
+     "reasoning_chars": 57,
+     "tool_calls": [],
+     "finish_reason": "stop",
+     "stream_issues": [],
+     "prompt_tokens": 6030,
+     "completion_tokens": 27,
+     "ttft": 2.1353386680129915,
+     "total": 9.192226840008516,
+     "engine_prompt_n": 11,
+     "engine_cache_n": 6019,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": []
+    },
+    {
+     "probe": "parallel",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 160,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "lOnTs4An5pe6d72LO3RzYlRDW5eydSZV",
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/parser.py\",\"offset\":1,\"limit\":200}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6043,
+     "completion_tokens": 75,
+     "ttft": 2.318527275987435,
+     "total": 24.20601785701001,
+     "engine_prompt_n": 27,
+     "engine_cache_n": 6016,
+     "pass": false,
+     "reason": "one_at_a_time",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/parser.py\",\"offset\":1,\"limit\":200}",
+       "action": "read"
+      }
+     ]
+    },
+    {
+     "probe": "parallel",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 43,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "Z8bfUKKDb58GpkPlb1UYPt3Q2XzD4p8g",
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/tests/test_parser.py\",\"offset\":1,\"limit\":2000}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6040,
+     "completion_tokens": 51,
+     "ttft": 2.268956515006721,
+     "total": 15.892910472000949,
+     "engine_prompt_n": 24,
+     "engine_cache_n": 6016,
+     "pass": false,
+     "reason": "one_at_a_time",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/tests/test_parser.py\",\"offset\":1,\"limit\":2000}",
+       "action": "read"
+      }
+     ]
+    },
+    {
+     "probe": "parallel",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 91,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "8q6lrWX7hicHJhkqRG3WtvJAPn8UJE0O",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"http_client.py\",\"path\":\"src/app/\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6043,
+     "completion_tokens": 48,
+     "ttft": 2.4374673060374334,
+     "total": 14.634218173043337,
+     "engine_prompt_n": 27,
+     "engine_cache_n": 6016,
+     "pass": false,
+     "reason": "one_at_a_time",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"http_client.py\",\"path\":\"src/app/\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "parallel",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 39,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "g1JkFPO0Z4vysRX3wP5UjuAswMAuflqs",
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/parser.py\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6043,
+     "completion_tokens": 41,
+     "ttft": 2.0945181230199523,
+     "total": 11.947368527995422,
+     "engine_prompt_n": 23,
+     "engine_cache_n": 6020,
+     "pass": false,
+     "reason": "one_at_a_time",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/src/app/parser.py\"}",
+       "action": "read"
+      }
+     ]
+    },
+    {
+     "probe": "parallel",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 82,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "gC09o3J53Rsg87HF0SSVXBZ4BXwole6Y",
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/tests/test_parser.py\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6040,
+     "completion_tokens": 50,
+     "ttft": 1.3197431560256518,
+     "total": 16.236829938017763,
+     "engine_prompt_n": 1,
+     "engine_cache_n": 6039,
+     "pass": false,
+     "reason": "one_at_a_time",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "read",
+       "arguments": "{\"filePath\":\"/home/dev/project/tests/test_parser.py\"}",
+       "action": "read"
+      }
+     ]
+    },
+    {
+     "probe": "parallel",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 112,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "VCuFnOcnA4bsXiLtDHYxqYcyDjEjeckO",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"app/settings.py\",\"path\":\"src\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6043,
+     "completion_tokens": 52,
+     "ttft": 3.0901638520299457,
+     "total": 18.19829072803259,
+     "engine_prompt_n": 5,
+     "engine_cache_n": 6038,
+     "pass": false,
+     "reason": "one_at_a_time",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"app/settings.py\",\"path\":\"src\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "recover",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 47,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "0mXxXeNOf7EHsUsAssffM4qf0a6uUz41",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"**/*.py\",\"path\":\"/home/dev/project\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6082,
+     "completion_tokens": 42,
+     "ttft": 2.8425322719849646,
+     "total": 14.141808243992273,
+     "engine_prompt_n": 63,
+     "engine_cache_n": 6019,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"**/*.py\",\"path\":\"/home/dev/project\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "recover",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 43,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "Hc0itCEdQ4ECvtFlEj6Pi63bpoZ7EUMZ",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"settings.yaml\",\"path\":\"src\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6081,
+     "completion_tokens": 38,
+     "ttft": 3.1606965319951996,
+     "total": 13.27699585998198,
+     "engine_prompt_n": 65,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"settings.yaml\",\"path\":\"src\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "recover",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 24,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "CX9JeFi7DgFSkH1usvRT8RV5ScALgLKv",
+       "name": "read",
+       "arguments": "{\"filePath\": \"/home/dev/project/README.md\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6076,
+     "completion_tokens": 34,
+     "ttft": 3.0340652120066807,
+     "total": 11.835409174032975,
+     "engine_prompt_n": 60,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "read",
+       "arguments": "{\"filePath\": \"/home/dev/project/README.md\"}",
+       "action": "read"
+      }
+     ]
+    },
+    {
+     "probe": "recover",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 30,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "1jIWiMxuvjEwG6yji2081HlmmPpN25cj",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"src/app/*.py\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6082,
+     "completion_tokens": 33,
+     "ttft": 2.512943855021149,
+     "total": 11.081850800022949,
+     "engine_prompt_n": 1,
+     "engine_cache_n": 6081,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"src/app/*.py\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "recover",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 31,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "3NTSxAwEP885PcsVtrK8QtOW5uSLUEKN",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"settings.yaml\",\"path\":\"src\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6081,
+     "completion_tokens": 34,
+     "ttft": 1.2948708850308321,
+     "total": 28.61577788303839,
+     "engine_prompt_n": 1,
+     "engine_cache_n": 6080,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"settings.yaml\",\"path\":\"src\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "recover",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 74,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "YoTfABte3Ppi2jOgHENta94fPCU8AXUc",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"README*\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6076,
+     "completion_tokens": 41,
+     "ttft": 3.026287548011169,
+     "total": 44.36996949301101,
+     "engine_prompt_n": 60,
+     "engine_cache_n": 6016,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"README*\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "long_write",
+     "instance": 0,
+     "trial": 0,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 85,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "ftnemjSX7X2bVEko7qcXw1V6jitDvY6L",
+       "name": "glob",
+       "arguments": "{\"pattern\": \"**/*.py\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6212,
+     "completion_tokens": 41,
+     "ttft": 20.044828862999566,
+     "total": 56.08525942999404,
+     "engine_prompt_n": 192,
+     "engine_cache_n": 6020,
+     "pass": false,
+     "reason": "no_complete_file",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\": \"**/*.py\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "long_write",
+     "instance": 1,
+     "trial": 1,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 78,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "qriY95HK3aPhgcLfB4ccTv054bULH5Rb",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"tests\",\"path\":\"\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6174,
+     "completion_tokens": 40,
+     "ttft": 19.816448980011046,
+     "total": 55.60765431995969,
+     "engine_prompt_n": 156,
+     "engine_cache_n": 6018,
+     "pass": false,
+     "reason": "no_complete_file",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"tests\",\"path\":\"\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "long_write",
+     "instance": 2,
+     "trial": 2,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 111,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "vG9gkfylHl3Va9z458fDTPTJcMhr8MXx",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"src/app\", \"path\":\"/home/dev/project\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6211,
+     "completion_tokens": 57,
+     "ttft": 15.300999878963921,
+     "total": 53.92348729696823,
+     "engine_prompt_n": 195,
+     "engine_cache_n": 6016,
+     "pass": false,
+     "reason": "no_complete_file",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"src/app\", \"path\":\"/home/dev/project\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "long_write",
+     "instance": 0,
+     "trial": 3,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 160,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "0W0JHi9opPNtCzJnADWxT1zcw5NkokUL",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"scripts\",\"path\":\"/home/dev/project\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6212,
+     "completion_tokens": 61,
+     "ttft": 15.008034829981625,
+     "total": 40.9989492649911,
+     "engine_prompt_n": 196,
+     "engine_cache_n": 6016,
+     "pass": false,
+     "reason": "no_complete_file",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"scripts\",\"path\":\"/home/dev/project\"}",
+       "action": "list"
+      }
+     ]
+    },
+    {
+     "probe": "long_write",
+     "instance": 1,
+     "trial": 4,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 545,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "B3YqVwU9cqRn8twKc9Wy4H1sPaut0HJ5",
+       "name": "write",
+       "arguments": "{\"content\":\"import pytest\\n\\nfrom app.cache import cached_rate\\n\\n@pytest.mark.parametrize(\\n    \\\"currency,expected\\\",\\n    [\\n        (\\\"EUR\\\", 1.0),\\n        (\\\"USD\\\", 1.08),\\n        (\\\"GBP\\\", 0.86),\\n    ],\\n)\\ndef test_cached_rate_known(capsys, currency, expected):\\n    # Cached rate should return the expected conversion factor\\n    result = cached_rate(currency)\\n    assert result == expected\\n\\n\\ndef test_cached_rate_unknown():\\n    with pytest.raises(KeyError):\\n        cached_rate(\\\"JPY\\\")\\n\",\"filePath\": \"/home/dev/project/tests/test_cache.py\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6174,
+     "completion_tokens": 288,
+     "ttft": 13.618903139024042,
+     "total": 68.14580679900246,
+     "engine_prompt_n": 5,
+     "engine_cache_n": 6169,
+     "pass": true,
+     "reason": null,
+     "warnings": [],
+     "calls": [
+      {
+       "name": "write",
+       "arguments": "{\"content\":\"import pytest\\n\\nfrom app.cache import cached_rate\\n\\n@pytest.mark.parametrize(\\n    \\\"currency,expected\\\",\\n    [\\n        (\\\"EUR\\\", 1.0),\\n        (\\\"USD\\\", 1.08),\\n        (\\\"GBP\\\", 0.86),\\n    ],\\n)\\ndef test_cached_rate_known(capsys, currency, expected):\\n    # Cached rate should return the expected conversion factor\\n    result = cached_rate(currency)\\n    assert result == expected\\n\\n\\ndef test_cached_rate_unknown():\\n    with pytest.raises(KeyError):\\n        cached_rate(\\\"JPY\\\")\\n\",\"filePath\": \"/home/dev/project/tests/test_cache.py\"}",
+       "action": "write"
+      }
+     ]
+    },
+    {
+     "probe": "long_write",
+     "instance": 2,
+     "trial": 5,
+     "ok": true,
+     "status": 200,
+     "error": null,
+     "content": "",
+     "reasoning_chars": 103,
+     "tool_calls": [
+      {
+       "index": 0,
+       "id": "rGGPmIbnbDZFJcb8uhxW0NKarR6mZ27y",
+       "name": "glob",
+       "arguments": "{\"pattern\":\"src/app\",\"path\":\"/home/dev/project\"}"
+      }
+     ],
+     "finish_reason": "tool_calls",
+     "stream_issues": [],
+     "prompt_tokens": 6211,
+     "completion_tokens": 56,
+     "ttft": 13.370055315026548,
+     "total": 25.20733696903335,
+     "engine_prompt_n": 192,
+     "engine_cache_n": 6019,
+     "pass": false,
+     "reason": "no_complete_file",
+     "warnings": [],
+     "calls": [
+      {
+       "name": "glob",
+       "arguments": "{\"pattern\":\"src/app\",\"path\":\"/home/dev/project\"}",
+       "action": "list"
+      }
+     ]
+    }
+   ],
    "turns": [
     {
      "session": 0,
@@ -464,7 +2253,16 @@
      "engine_cache_n": 9962,
      "engine_prompt_ms": 18404.556
     }
-   ]
+   ],
+   "fit": {
+    "ok": true,
+    "error": null,
+    "prompt_tokens": 6052,
+    "floor_tokens": 4416,
+    "context": 131072,
+    "ttft": 117.41974553099135,
+    "verdict": "fits"
+   }
   }
  },
  "finished": "2026-11-02T05:44:00+00:00",
@@ -498,6 +2296,39 @@
     "threads": 16,
     "memory_gib": 62,
     "load_at_start": 18.5
+   }
+  },
+  "probes": {
+   "started": "2026-11-02T08:52:43+00:00",
+   "finished": "2026-11-02T09:10:06+00:00",
+   "host": {
+    "machine": "aarch64",
+    "system": "Linux",
+    "python": "3.14.7",
+    "cpu": "Neoverse-V2",
+    "cpus": "0-15",
+    "cores_used": 16,
+    "threads": 16,
+    "memory_gib": 62,
+    "load_at_start": 13.81
+   },
+   "setup": {
+    "engine": "llama.cpp",
+    "model": "gpt-oss-20b",
+    "title": "gpt-oss-20b",
+    "ollama_tag": "gpt-oss:20b",
+    "gguf": "gpt-oss-20b-GGUF/gpt-oss-20b-MXFP4.gguf",
+    "llama_server_args": [
+     "--temp",
+     "1",
+     "--top-p",
+     "1",
+     "--top-k",
+     "0"
+    ],
+    "env": {},
+    "concurrency": 4,
+    "ollama_parallel": null
    }
   }
  }

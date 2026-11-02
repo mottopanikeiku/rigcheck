@@ -78,8 +78,7 @@ def _cmd_compare(a: argparse.Namespace) -> None:
     nb = rb.get("label") or f"{rb['endpoint']['engine']} / {rb['endpoint']['model']}"
     print(f"A = {na}\nB = {nb}\n")
     for agent in sorted(set(ra["agents"]) & set(rb["agents"])):
-        pa = {(r["probe"], r["instance"], r["trial"]): r["pass"] for r in ra["agents"][agent].get("probes", [])}
-        pb = {(r["probe"], r["instance"], r["trial"]): r["pass"] for r in rb["agents"][agent].get("probes", [])}
+        pa, pb = ({(r["probe"], r["instance"], r["trial"]): r["pass"] for r in report._rescored(x["agents"][agent]) if r["pass"] is not None} for x in (ra, rb))
         keys = sorted(set(pa) & set(pb))
         pairs = [(pa[k], pb[k]) for k in keys]
         print(f"{agent}:")
