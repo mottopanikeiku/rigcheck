@@ -71,6 +71,10 @@ def run_session(client: Client, profile: Profile, base: dict, session: int, log=
             "engine_cache_n": t.get("cache_n"),
             "engine_prompt_ms": t.get("prompt_ms"),
             "engine_timings": t or None,
+            "content_chars": len(c.content),
+            "reasoning_chars": len(c.reasoning),
+            "tool_calls": len(c.tool_calls),
+            "stream_issues": c.stream_issues,
         }
         rows.append(row)
         if log:

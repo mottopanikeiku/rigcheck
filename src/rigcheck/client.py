@@ -206,4 +206,6 @@ class Client:
             if not c.id:
                 out.stream_issues.append("tool call without id")
                 break
+        if out.ok and out.finish_reason is None:
+            out.stream_issues.append("stream ended without finish_reason")
         return out
