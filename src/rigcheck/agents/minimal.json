@@ -1,0 +1,201 @@
+{
+ "name": "minimal",
+ "title": "Minimal (control)",
+ "version": "1",
+ "license": "MIT",
+ "source": "https://github.com/mottopanikeiku/rigcheck",
+ "notes": "A 4-tool, few-hundred-token control prompt. Failures here are the model or engine, not the agent's prompt size.",
+ "messages": [
+  {
+   "role": "system",
+   "content": "You are a coding assistant working in the repository at /home/dev/project. Use the tools to look at files, run commands and change code. Do not guess file contents; read them. Keep answers short.\n\nRepository layout:\nREADME.md\npyproject.toml\nsrc/app/__init__.py\nsrc/app/cache.py\nsrc/app/http_client.py\nsrc/app/mathutil.py\nsrc/app/parser.py\nsrc/app/settings.py\nsrc/app/utils.py\ntests/test_mathutil.py\ntests/test_parser.py"
+  },
+  {
+   "role": "user",
+   "content": "{task}"
+  }
+ ],
+ "tools": [
+  {
+   "type": "function",
+   "function": {
+    "name": "read_file",
+    "description": "Read a file from the repository.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "path": {
+       "type": "string",
+       "description": "Path relative to the repository root."
+      }
+     },
+     "required": [
+      "path"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "run",
+    "description": "Run a shell command in the repository root and return its output.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "command": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "command"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "edit_file",
+    "description": "Replace an exact string in a file.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "path": {
+       "type": "string"
+      },
+      "old": {
+       "type": "string",
+       "description": "Exact text to replace."
+      },
+      "new": {
+       "type": "string",
+       "description": "Replacement text."
+      }
+     },
+     "required": [
+      "path",
+      "old",
+      "new"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "write_file",
+    "description": "Create or overwrite a file.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "path": {
+       "type": "string"
+      },
+      "content": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "path",
+      "content"
+     ],
+     "additionalProperties": false
+    }
+   }
+  },
+  {
+   "type": "function",
+   "function": {
+    "name": "search",
+    "description": "Search the repository for a regular expression. Returns matching lines with file names.",
+    "parameters": {
+     "type": "object",
+     "properties": {
+      "pattern": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "pattern"
+     ],
+     "additionalProperties": false
+    }
+   }
+  }
+ ],
+ "params": {},
+ "roles": {
+  "read_file": {
+   "kind": "read",
+   "fields": {
+    "path": "path"
+   }
+  },
+  "run": {
+   "kind": "shell",
+   "fields": {
+    "command": "command"
+   }
+  },
+  "edit_file": {
+   "kind": "edit",
+   "fields": {
+    "path": "path",
+    "old": "old",
+    "new": "new"
+   }
+  },
+  "write_file": {
+   "kind": "write",
+   "fields": {
+    "path": "path",
+    "content": "content"
+   }
+  },
+  "search": {
+   "kind": "search",
+   "fields": {
+    "pattern": "pattern"
+   }
+  }
+ },
+ "canned": {
+  "read": {
+   "tool": "read_file",
+   "args": {
+    "path": "{path}"
+   }
+  },
+  "shell": {
+   "tool": "run",
+   "args": {
+    "command": "{command}"
+   }
+  },
+  "search": {
+   "tool": "search",
+   "args": {
+    "pattern": "{pattern}"
+   }
+  },
+  "edit": {
+   "tool": "edit_file",
+   "args": {
+    "path": "{path}",
+    "old": "{old}",
+    "new": "{new}"
+   }
+  },
+  "write": {
+   "tool": "write_file",
+   "args": {
+    "path": "{path}",
+    "content": "{content}"
+   }
+  }
+ }
+}

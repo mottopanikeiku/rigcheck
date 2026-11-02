@@ -1,0 +1,12 @@
+The prompts and tool schemas in opencode.json, codex.json and qwen-code.json were
+recorded from the requests those agents send. They keep their authors' licenses:
+
+  opencode.json   OpenCode 1.19.5    https://github.com/sst/opencode       MIT (LICENSE-opencode-MIT.txt), Copyright (c) 2025 opencode
+  codex.json      Codex CLI 0.166.0  https://github.com/openai/codex       Apache-2.0 (LICENSE-Apache-2.0.txt), Copyright 2025 OpenAI
+  qwen-code.json  Qwen Code 0.26.5   https://github.com/QwenLM/qwen-code   Apache-2.0 (LICENSE-Apache-2.0.txt), Copyright 2025 Qwen Team
+
+Changes made when recording: the working directory and home paths were replaced with
+/home/dev/project and /home/dev, and the user's task with {task}. Codex CLI speaks the
+Responses API; its request was converted to chat completions (developer messages merged
+into one system message, namespaced tools flattened to ns__name, the hosted web_search
+tool dropped).
