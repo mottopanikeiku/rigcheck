@@ -80,6 +80,10 @@ def summarize(res: dict) -> list[dict]:
                 "max_turn_prompt": max(turn_prompt) if turn_prompt else None,
             }
         )
+        if rows[-1]["fit"] == "truncated":
+            # the engine did not read the prompt, so its speed on it means nothing
+            nan = (math.nan, math.nan, math.nan)
+            rows[-1].update(cold_ttft=nan, warm_ttft=nan, warm_p90=nan, warm_over_cold=nan, session_wait=nan, decode_tps=nan)
     return rows
 
 
