@@ -58,9 +58,9 @@ MODELS = {
 
 # llama.cpp and Ollama as installed, plus Ollama with the context its docs recommend for agents.
 ENGINES = {
-    "llama.cpp": {"env": {}},
-    "ollama": {"env": {}},
-    "ollama-64k": {"env": {"OLLAMA_CONTEXT_LENGTH": "65536"}},
+    "llama.cpp": {"name": "llama.cpp", "env": {}},
+    "ollama": {"name": "Ollama default", "env": {}},
+    "ollama-64k": {"name": "Ollama 64k", "env": {"OLLAMA_CONTEXT_LENGTH": "65536"}},
 }
 
 
@@ -304,7 +304,7 @@ def main() -> None:
                         agents=args.agents,
                         trials=args.trials if args.phase == "probes" else 0,
                         sessions=args.sessions if args.phase == "timing" else 0,
-                        label=f"{engine} · {model['title']}",
+                        label=f"{ENGINES[engine]['name']} · {model['title']}",
                         fit=args.phase == "probes",
                         concurrency=args.concurrency,
                         timeout=6 * 3600 if yielder else 900,

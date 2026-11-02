@@ -52,7 +52,7 @@ def summarize(res: dict) -> list[dict]:
             {
                 "label": res.get("label"),
                 "engine": ep.get("engine"),
-                "variant": (res.get("setup") or {}).get("engine") or ep.get("engine"),
+                "variant": (res.get("label") or "").split(" · ")[0] or ep.get("engine"),
                 "engine_version": ep.get("version"),
                 "model": _model_name(res),
                 "agent": name,
