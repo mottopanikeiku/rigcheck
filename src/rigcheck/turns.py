@@ -48,8 +48,9 @@ def run_session(client: Client, profile: Profile, base: dict, session: int, log=
     nonce = secrets.token_hex(6)
     preamble = profile.build_messages(TASK, nonce=nonce)
     history = script(profile)
+    base = {**base, "tools": profile.build_tools(nonce)}
     rows = []
-    tools_chars = len(json.dumps(base.get("tools") or []))
+    tools_chars = len(json.dumps(base["tools"]))
     for turn in range(1, len(history) // 2 + 2):
         messages = preamble + history[: 2 * (turn - 1)]
         body = {**base, "messages": messages, "stream": True}

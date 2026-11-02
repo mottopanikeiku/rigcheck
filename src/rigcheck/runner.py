@@ -79,7 +79,8 @@ def _min_prompt_tokens(profile: Profile) -> int:
 
 def fit_check(client: Client, cfg: RunConfig, profile: Profile, info: dict) -> dict:
     """One cold request: does the engine see the whole agent prompt?"""
-    body = {**_base_body(cfg, profile), "messages": profile.build_messages("Say ok.", nonce=secrets.token_hex(6))}
+    nonce = secrets.token_hex(6)
+    body = {**_base_body(cfg, profile), "messages": profile.build_messages("Say ok.", nonce=nonce), "tools": profile.build_tools(nonce)}
     body.update({"stream": True, "max_tokens": 8})
     c = client.chat(body, headers={"X-Rigcheck-Probe": "fit/0", "X-Rigcheck-Agent": profile.name})
     floor = _min_prompt_tokens(profile)

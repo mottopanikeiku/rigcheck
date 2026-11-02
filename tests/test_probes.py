@@ -84,6 +84,9 @@ def test_nonce_makes_prompt_unique():
     a = prof.build_messages("hi", nonce="aaaa")
     b = prof.build_messages("hi", nonce="bbbb")
     assert a != b and a[1:] == b[1:]
+    ta, tb = prof.build_tools("aaaa"), prof.build_tools("bbbb")
+    assert ta[0] != tb[0] and ta[1:] == tb[1:] == prof.tools[1:]
+    assert prof.build_tools(None) is prof.tools
 
 
 def test_parallel_globs_for_both_files_count():

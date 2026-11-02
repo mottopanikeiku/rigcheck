@@ -66,8 +66,8 @@ def make_handler(state: State):
             body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
             mode = body.get("model", "good")
             msgs = body.get("messages") or []
-            # system prompt, then tools, then the conversation: the order most chat templates render
-            prompt = json.dumps(msgs[:1]) + json.dumps(body.get("tools")) + json.dumps(msgs[1:])
+            # tools, then the system prompt, then the conversation, as Qwen's chat templates render it
+            prompt = json.dumps(body.get("tools")) + json.dumps(msgs)
             with state.lock:
                 if mode == "nocache":
                     reused = 0

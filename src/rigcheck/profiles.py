@@ -65,8 +65,9 @@ class Profile:
     def build_messages(self, task: str, nonce: str | None = None) -> list[dict]:
         """The agent's preamble with the user's task filled in.
 
-        A nonce at the very start of the first message makes the prompt unique, so no
-        engine can serve any of it from cache (a cold turn)."""
+        A nonce at the start of the first message makes the prompt unique. Some chat
+        templates (Qwen's) render the tools before the system prompt, so a cold turn
+        also needs build_tools(nonce)."""
         msgs = json.loads(json.dumps(self.messages))
         placed = False
         for m in msgs:
@@ -88,6 +89,15 @@ class Profile:
             elif isinstance(first.get("content"), list) and first["content"]:
                 first["content"][0]["text"] = f"[session {nonce}]\n" + first["content"][0]["text"]
         return msgs
+
+    def build_tools(self, nonce: str | None = None) -> list[dict]:
+        """The agent's tools; with a nonce, the first description starts with it."""
+        if not nonce or not self.tools:
+            return self.tools
+        tools = json.loads(json.dumps(self.tools))
+        fn = tools[0]["function"]
+        fn["description"] = f"[session {nonce}] " + (fn.get("description") or "")
+        return tools
 
     def call(self, kind: str, call_id: str, **fields: str) -> dict:
         """An assistant tool call, in this agent's own tool format, for a history."""
