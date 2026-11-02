@@ -26,10 +26,10 @@ for m in qwen3.5:4b gemma4:e4b gpt-oss:20b qwen3.6:35b; do OLLAMA_HOST=127.0.0.1
 kill "$pid"
 wait "$pid" || true
 
-uv run scripts/matrix.py --phase probes --engines llama.cpp --cpus 8-15 --threads 8 --trials 10 --concurrency 4 --yield-to "$BENCH_LOCK"
-uv run scripts/matrix.py --phase probes --engines ollama-64k --cpus 8-15 --threads 8 --trials 10 --yield-to "$BENCH_LOCK"
-uv run scripts/matrix.py --phase probes --engines ollama --cpus 8-15 --threads 8 --trials 6 --yield-to "$BENCH_LOCK"
-uv run scripts/matrix.py --phase probes --engines llama.cpp --models qwen3.6-35b-a3b --agents codex qwen-code minimal \
-    --cpus 8-15 --threads 8 --trials 10 --yield-to "$BENCH_LOCK"
+P="uv run scripts/matrix.py --phase probes --cpus 8-15 --threads 8 --yield-to $BENCH_LOCK"
+$P --engines llama.cpp --trials 10 --concurrency 4
+$P --engines ollama-64k --trials 8
+$P --engines ollama --trials 6
+$P --engines llama.cpp --models qwen3.6-35b-a3b --agents codex qwen-code goose minimal --trials 6 --concurrency 4
 uv run scripts/matrix.py --phase timing --cpus 0-15 --threads 16 --sessions 5 --lock "$BENCH_LOCK"
 uv run rigcheck report results/*.json --agent opencode --svg docs/results.svg --md docs/results.md --title "rigcheck: OpenCode on a 16-core Neoverse-V2, CPU only"
