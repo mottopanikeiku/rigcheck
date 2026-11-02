@@ -264,6 +264,8 @@ def acquire_quiet(path: str, max_load: float, max_others: float):
             if others is not None and others < max_others:
                 return lock, round((time.time() - waited_since) / 60, 1)
             log(f"not quiet: load {load:.1f}" + (f", others {others:.2f} cores" if others is not None else ""))
+            if others is None:
+                time.sleep(60)
         fcntl.flock(lock, fcntl.LOCK_UN)
         lock.close()
         log(f"still busy after five minutes ({(time.time() - waited_since) / 60:.0f} min so far); retrying in 10 minutes")
