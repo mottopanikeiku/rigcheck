@@ -52,6 +52,7 @@ def summarize(res: dict) -> list[dict]:
             {
                 "label": res.get("label"),
                 "engine": ep.get("engine"),
+                "variant": (res.get("setup") or {}).get("engine") or ep.get("engine"),
                 "engine_version": ep.get("version"),
                 "model": _model_name(res),
                 "agent": name,
@@ -234,7 +235,7 @@ def svg(rows: list[dict], title: str = "") -> str:
     """Two panels per setup row: tool-call pass rate with its Wilson interval, and
     first-token latency for the cold turn vs warm turns (log scale)."""
     rows = [r for r in rows if r["n"] or r["sessions"]]
-    engines = list(dict.fromkeys(r["engine"] for r in rows))
+    engines = list(dict.fromkeys(r["variant"] for r in rows))
     color = {e: PALETTE[i % len(PALETTE)] for i, e in enumerate(engines)}
     row_h, top, left = 30, 62 if title else 44, 300
     pw, gap = 300, 60
@@ -276,8 +277,10 @@ def svg(rows: list[dict], title: str = "") -> str:
         t *= 10
     for i, r in enumerate(rows):
         y = top + row_h * i + row_h / 2
-        c = color[r["engine"]]
+        c = color[r["variant"]]
         name = setup_name(r) + (f" · {r['agent']}" if len({x["agent"] for x in rows}) > 1 else "")
+        if r["fit"] == "truncated":
+            name += f" (prompt cut to {ktok(r['prompt_tokens'])})"
         e.append(f'<text x="{left - 12}" y="{y + 4:.1f}" text-anchor="end" fill="#111827">{_html.escape(name)}</text>')
         if r["n"]:
             e.append(f'<line x1="{sx(r["lo"]):.1f}" y1="{y:.1f}" x2="{sx(r["hi"]):.1f}" y2="{y:.1f}" stroke="{c}" stroke-width="2"/>')

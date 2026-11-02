@@ -70,6 +70,7 @@ def run_session(client: Client, profile: Profile, base: dict, session: int, log=
             "engine_prompt_n": t.get("prompt_n"),
             "engine_cache_n": t.get("cache_n"),
             "engine_prompt_ms": t.get("prompt_ms"),
+            "engine_timings": t or None,
         }
         rows.append(row)
         if log:
