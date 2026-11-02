@@ -185,10 +185,22 @@ def host_info(args) -> dict:
     }
 
 
-def wait_quiet(max_load: float) -> None:
-    while (load := os.getloadavg()[0]) >= max_load:
-        log(f"load average {load:.1f} >= {max_load}; waiting")
-        time.sleep(60)
+def acquire_quiet(path: str, max_load: float):
+    """Take the bench lock once the machine is quiet. Holding the lock pauses our own
+    probe runs, so give the load average five minutes to settle; if it doesn't, let go
+    of the lock (someone else may need it) and try again later."""
+    while True:
+        lock = open(path, "a")
+        log(f"waiting for {path}")
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        for _ in range(5):
+            if os.getloadavg()[0] < max_load:
+                return lock
+            time.sleep(60)
+        log(f"load average {os.getloadavg()[0]:.1f} >= {max_load} with the lock held; retrying in 10 minutes")
+        fcntl.flock(lock, fcntl.LOCK_UN)
+        lock.close()
+        time.sleep(600)
 
 
 def merge(path: Path, res: dict, phase: str) -> dict:
@@ -233,13 +245,8 @@ def main() -> None:
         model = MODELS[key]
         for engine in args.engines:
             path = out / f"{engine}--{key}.json"
-            lock = open(args.lock, "a") if args.lock else None
-            if lock:
-                log(f"waiting for {args.lock}")
-                fcntl.flock(lock, fcntl.LOCK_EX)
+            lock = acquire_quiet(args.lock, args.max_load) if args.lock else None
             try:
-                if lock:
-                    wait_quiet(args.max_load)
                 log(f"{args.phase}: {engine} / {model['title']}")
                 if engine == "llama.cpp":
                     proc, url, model_id = start_llama(model, args)
