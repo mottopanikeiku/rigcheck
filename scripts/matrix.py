@@ -136,6 +136,8 @@ def start_llama(model: dict, args) -> tuple[subprocess.Popen, str, str]:
 
 def start_ollama(engine: str, model: dict, args) -> tuple[subprocess.Popen, str, str]:
     env = {**os.environ, "OLLAMA_HOST": f"127.0.0.1:{args.port}", **ENGINES[engine]["env"]}
+    if args.ollama_parallel:
+        env["OLLAMA_NUM_PARALLEL"] = str(args.ollama_parallel)
     exe = os.path.expanduser(os.environ["OLLAMA"])
     proc = spawn(["taskset", "-c", args.cpus, exe, "serve"], args.log, env=env)
     url = f"http://127.0.0.1:{args.port}"
@@ -243,9 +245,9 @@ def acquire_quiet(path: str, max_load: float):
 def merge(path: Path, res: dict, phase: str) -> dict:
     old = json.loads(path.read_text()) if path.exists() else None
     if not old:
-        res["phases"] = {phase: {"started": res["started"], "finished": res["finished"], "host": res["host"]}}
+        res["phases"] = {phase: {"started": res["started"], "finished": res["finished"], "host": res["host"], "setup": res["setup"]}}
         return res
-    old.setdefault("phases", {})[phase] = {"started": res["started"], "finished": res["finished"], "host": res["host"]}
+    old.setdefault("phases", {})[phase] = {"started": res["started"], "finished": res["finished"], "host": res["host"], "setup": res["setup"]}
     for name, entry in res["agents"].items():
         dst = old["agents"].setdefault(name, entry)
         if phase == "probes":
@@ -270,6 +272,7 @@ def main() -> None:
     ap.add_argument("--threads", type=int, default=16)
     ap.add_argument("--port", type=int, default=8090)
     ap.add_argument("--concurrency", type=int, default=1, help="probe requests in flight")
+    ap.add_argument("--ollama-parallel", type=int, help="OLLAMA_NUM_PARALLEL, so Ollama can serve concurrent probes")
     ap.add_argument("--out", default="results")
     ap.add_argument("--lock", help="flock this file around each setup")
     ap.add_argument("--max-load", type=float, default=3.0)
@@ -317,6 +320,8 @@ def main() -> None:
                         "gguf": model["gguf"],
                         "llama_server_args": model["sampling"],
                         "env": ENGINES[engine]["env"],
+                        "concurrency": args.concurrency,
+                        "ollama_parallel": args.ollama_parallel if engine != "llama.cpp" else None,
                     }
                     path.write_text(json.dumps(merge(path, res, args.phase), indent=1))
                     log(f"wrote {path}")
